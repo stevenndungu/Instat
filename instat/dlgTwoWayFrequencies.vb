@@ -72,28 +72,29 @@ Public Class dlgTwoWayFrequencies
         ucrPnlFreqType.AddRadioButton(rdoCell, Chr(34) & "cell" & Chr(34))
         ucrPnlFreqType.bAllowNonConditionValues = False
 
-        ucrChkRow.SetText("Row (%)")
         ucrChkRow.SetParameter(New RParameter("show.row.prc", 4), bNewChangeParameterValue:=True, bNewAddRemoveParameter:=True, strNewValueIfChecked:="TRUE", strNewValueIfUnchecked:="FALSE")
+        ucrChkRow.SetText("Row (%)")
         ucrChkRow.SetRDefault("FALSE")
 
-        ucrChkCount.SetText("Count)")
         ucrChkCount.SetParameter(New RParameter("show.obs", 5), bNewChangeParameterValue:=True, bNewAddRemoveParameter:=True, strNewValueIfChecked:="TRUE", strNewValueIfUnchecked:="FALSE")
+        ucrChkCount.SetText("Count")
         ucrChkCount.SetRDefault("TRUE")
 
-        ucrChkColumn.SetText("Column (%)")
         ucrChkColumn.SetParameter(New RParameter("show.col.prc", 6), bNewChangeParameterValue:=True, bNewAddRemoveParameter:=True, strNewValueIfChecked:="TRUE", strNewValueIfUnchecked:="FALSE")
+        ucrChkColumn.SetText("Column (%)")
         ucrChkColumn.SetRDefault("FALSE")
 
-        ucrChkCell.SetText("Cell (%)")
         ucrChkCell.SetParameter(New RParameter("show.cell.prc", 7), bNewChangeParameterValue:=True, bNewAddRemoveParameter:=True, strNewValueIfChecked:="TRUE", strNewValueIfUnchecked:="FALSE")
+        ucrChkCell.SetText("Cell (%)")
         ucrChkCell.SetRDefault("FALSE")
 
         ucrChkWeights.SetText("Weights")
         ucrChkWeights.SetParameter(ucrReceiverWeights.GetParameter(), bNewChangeParameterValue:=False, bNewAddRemoveParameter:=True)
         ucrChkWeights.AddToLinkedControls(ucrReceiverWeights, {True}, bNewLinkedAddRemoveParameter:=True, bNewLinkedHideIfParameterMissing:=True)
 
-        ucrChkFlip.SetText("Flip Coordinates")
+        ucrChkFlip.AddToLinkedControls(ucrPnlFreqType, {rdoGraph}, bNewLinkedAddRemoveParameter:=True, bNewLinkedDisabledIfParameterMissing:=True)
         ucrChkFlip.SetParameter(New RParameter("coord.flip", 3), bNewChangeParameterValue:=True, bNewAddRemoveParameter:=True, strNewValueIfChecked:="TRUE", strNewValueIfUnchecked:="FALSE")
+        ucrChkFlip.SetText("Flip Coordinates")
         ucrChkFlip.SetRDefault("FALSE")
 
         ucrPnlFreqDisplay.AddRadioButton(rdoTable)
@@ -109,7 +110,6 @@ Public Class dlgTwoWayFrequencies
         ucrChkCell.SetLinkedDisplayControl(grpFrequencies)
         ' ucrPnlFreqDisplay.AddToLinkedControls(ucrChkFlip, {rdoGraph}, bNewLinkedDisabledIfParameterMissing:=True, bNewLinkedAddRemoveParameter:=True)
         ucrPnlFreqDisplay.AddToLinkedControls(ucrPnlFreqType, {rdoGraph}, bNewLinkedAddRemoveParameter:=True, bNewLinkedHideIfParameterMissing:=True)
-
         ucrPnlFreqType.SetLinkedDisplayControl(grpFreqType)
     End Sub
 
@@ -145,12 +145,12 @@ Public Class dlgTwoWayFrequencies
         bResetSubdialog = True
     End Sub
 
-    Public Sub ICallType()
+    Public Sub iCallType()
         If rdoTable.Checked Then
             'temporary
             '  ucrBase.clsRsyntax.bHTMLOutput = True
             ucrBase.clsRsyntax.iCallType = 0
-        ElseIf rdoGraph.Checked
+        ElseIf rdoGraph.Checked Then
             ' ucrBase.clsRsyntax.bHTMLOutput = False
             ucrBase.clsRsyntax.iCallType = 3
         ElseIf rdoTable.Checked AndAlso ucrChkFlip.Checked Then
@@ -207,7 +207,7 @@ Public Class dlgTwoWayFrequencies
 
     Private Sub AllControls_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrPnlFreqDisplay.ControlValueChanged
         ChangeBaseFunction()
-        ICallType()
+        iCallType()
     End Sub
 
     Private Sub Controls_ControlContentsChanged(ucrChangedControl As ucrCore) Handles ucrReceiverColumnFactor.ControlContentsChanged, ucrReceiverRowFactor.ControlContentsChanged, ucrReceiverWeights.ControlContentsChanged, ucrChkWeights.ControlContentsChanged
@@ -240,6 +240,6 @@ Public Class dlgTwoWayFrequencies
 
     Private Sub ucrChkFlip_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrChkFlip.ControlValueChanged
         ChangeBaseFunction()
-        ICallType()
+        iCallType()
     End Sub
 End Class
