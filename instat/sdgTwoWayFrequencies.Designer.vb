@@ -97,7 +97,7 @@ Partial Class sdgTwoWayFrequencies
         Me.grpTableOptions.Size = New System.Drawing.Size(304, 189)
         Me.grpTableOptions.TabIndex = 0
         Me.grpTableOptions.TabStop = False
-        Me.grpTableOptions.Text = "More Options"
+        Me.grpTableOptions.Text = "Table Options"
         '
         'lblNumberOfDecimals
         '
@@ -352,7 +352,7 @@ Partial Class sdgTwoWayFrequencies
         '
         'ucrBaseSubDialogue
         '
-        Me.ucrBaseSubDialogue.Location = New System.Drawing.Point(98, 329)
+        Me.ucrBaseSubDialogue.Location = New System.Drawing.Point(99, 326)
         Me.ucrBaseSubDialogue.Name = "ucrBaseSubDialogue"
         Me.ucrBaseSubDialogue.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ucrBaseSubDialogue.Size = New System.Drawing.Size(142, 30)
@@ -362,7 +362,7 @@ Partial Class sdgTwoWayFrequencies
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(339, 363)
+        Me.ClientSize = New System.Drawing.Size(339, 358)
         Me.Controls.Add(Me.tbTwoWayFrequencies)
         Me.Controls.Add(Me.ucrBaseSubDialogue)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow

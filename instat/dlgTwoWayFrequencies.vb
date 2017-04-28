@@ -191,18 +191,6 @@ Public Class dlgTwoWayFrequencies
         ucrChkCount.SetRCode(clsSjTab, bReset)
     End Sub
 
-    Private Sub ucrBase_BeforeClickOk(sender As Object, e As EventArgs) Handles ucrBase.BeforeClickOk
-        If rdoTable.Checked OrElse rdoBoth.Checked Then
-            ucrBase.clsRsyntax.SetBaseRFunction(clsSjTab)
-            'ucrBase.clsRsyntax.bHTMLOutput = True
-            ucrBase.clsRsyntax.iCallType = 0
-        ElseIf rdoGraph.Checked Then
-            ucrBase.clsRsyntax.SetBaseRFunction(clsSjPlot)
-            ' ucrBase.clsRsyntax.bHTMLOutput = False
-            ucrBase.clsRsyntax.iCallType = 3
-        End If
-    End Sub
-
     Private Sub TestOkEnabled()
         If Not ucrReceiverColumnFactor.IsEmpty() AndAlso Not ucrReceiverRowFactor.IsEmpty() Then
             If Not ucrChkWeights.Checked Then
@@ -217,7 +205,6 @@ Public Class dlgTwoWayFrequencies
         Else
             ucrBase.OKEnabled(False)
         End If
-
     End Sub
 
     Private Sub ucrBase_ClickReset(sender As Object, e As EventArgs) Handles ucrBase.ClickReset
@@ -226,15 +213,15 @@ Public Class dlgTwoWayFrequencies
         TestOkEnabled()
     End Sub
 
-    Private Sub Controls_ControlContentsChanged(ucrChangedControl As ucrCore) Handles ucrReceiverColumnFactor.ControlContentsChanged, ucrReceiverRowFactor.ControlContentsChanged, ucrReceiverWeights.ControlContentsChanged, ucrChkWeights.ControlContentsChanged
-        TestOkEnabled()
-    End Sub
-
-    Private Sub ucrChkWeights_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrChkWeights.ControlValueChanged
-        If ucrChkWeights.Checked Then
-            ucrReceiverWeights.SetMeAsReceiver()
-        Else
-            ucrReceiverRowFactor.SetMeAsReceiver()
+    Private Sub ucrBase_BeforeClickOk(sender As Object, e As EventArgs) Handles ucrBase.BeforeClickOk
+        If rdoTable.Checked OrElse rdoBoth.Checked Then
+            ucrBase.clsRsyntax.SetBaseRFunction(clsSjTab)
+            'ucrBase.clsRsyntax.bHTMLOutput = True
+            ucrBase.clsRsyntax.iCallType = 0
+        ElseIf rdoGraph.Checked Then
+            ucrBase.clsRsyntax.SetBaseRFunction(clsSjPlot)
+            ' ucrBase.clsRsyntax.bHTMLOutput = False
+            ucrBase.clsRsyntax.iCallType = 3
         End If
     End Sub
 
@@ -266,6 +253,18 @@ Public Class dlgTwoWayFrequencies
         TestOkEnabled()
     End Sub
 
+    Private Sub ChangeLocation()
+        If rdoBoth.Checked Then
+            grpFreqTypeTable.Location = New Point(240, 166)
+            grpFreqTypeGraph.Location = New Point(358, 166)
+            Me.Size = New Size(498, 411)
+        Else
+            grpFreqTypeTable.Location = New Point(263, 166)
+            grpFreqTypeGraph.Location = New Point(263, 166)
+            Me.Size = New Size(426, 411)
+        End If
+    End Sub
+
     Private Sub ucrChkFlip_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrChkFlip.ControlValueChanged, ucrPnlFreqDisplay.ControlValueChanged
         Dim clsRowParam As RParameter
         Dim clsColumnParam As RParameter
@@ -295,17 +294,18 @@ Public Class dlgTwoWayFrequencies
         Else
             ucrBase.clsRsyntax.RemoveParameter("margin")
         End If
-        changelocation()
+        ChangeLocation()
     End Sub
-    Private Sub changelocation()
-        If rdoBoth.Checked Then
-            grpFreqTypeTable.Location = New Point(240, 166)
-            grpFreqTypeGraph.Location = New Point(358, 166)
-            Me.Size = New Size(498, 411)
+
+    Private Sub ucrChkWeights_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrChkWeights.ControlValueChanged
+        If ucrChkWeights.Checked Then
+            ucrReceiverWeights.SetMeAsReceiver()
         Else
-            grpFreqTypeTable.Location = New Point(263, 166)
-            grpFreqTypeGraph.Location = New Point(263, 166)
-            Me.Size = New Size(426, 411)
+            ucrReceiverRowFactor.SetMeAsReceiver()
         End If
+    End Sub
+
+    Private Sub Controls_ControlContentsChanged(ucrChangedControl As ucrCore) Handles ucrReceiverColumnFactor.ControlContentsChanged, ucrReceiverRowFactor.ControlContentsChanged, ucrReceiverWeights.ControlContentsChanged, ucrChkWeights.ControlContentsChanged
+        TestOkEnabled()
     End Sub
 End Class

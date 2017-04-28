@@ -14,11 +14,11 @@
 ' You should have received a copy of the GNU General Public License k
 ' along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Imports instat
 Imports instat.Translations
 Public Class sdgTwoWayFrequencies
     Public bControlsInitialised As Boolean = False
     Public clsTwoWayTableFreq, clsTwoWayGraphFreq As New RFunction
+
     Private Sub sdgTwoWayFrequencies_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         autoTranslate(Me)
     End Sub
@@ -69,6 +69,7 @@ Public Class sdgTwoWayFrequencies
         ucrChkBackgroundColour.SetParameter(New RParameter("emph.total", 11), bNewChangeParameterValue:=True, bNewAddRemoveParameter:=True, strNewValueIfChecked:="TRUE", strNewValueIfUnchecked:="FALSE")
         ucrChkBackgroundColour.SetText("Totals Column/Row Background Highlighted")
         ucrChkBackgroundColour.SetRDefault("FALSE")
+
         'Setting Plot parameter
         ucrChkShowCount.SetParameter(New RParameter("show.n", 5), bNewChangeParameterValue:=True, bNewAddRemoveParameter:=True, strNewValueIfChecked:="TRUE", strNewValueIfUnchecked:="FALSE")
         ucrChkShowCount.SetText("Show Count")
