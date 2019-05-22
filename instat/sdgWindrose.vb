@@ -23,6 +23,7 @@ Public Class sdgWindrose
     Private dctSequatailPairs As New Dictionary(Of String, String)
     Private dctDivergingPairs As New Dictionary(Of String, String)
     Private dctQualititivePairs As New Dictionary(Of String, String)
+    Private clsSpeedCuts As New RFunction
 
     Private Sub sdgWindrose_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         autoTranslate(Me)
@@ -40,7 +41,10 @@ Public Class sdgWindrose
         ucrNudNoOfSpeeds.SetParameter(New RParameter("n_speeds", 4))
         ucrNudNoOfSpeeds.SetRDefault(5)
 
-        ucrInputSpeedCuts.SetParameter(New RParameter("speed_cuts", 5))
+        ucrInputSpeedCuts.SetParameter(New RParameter("list", 0))
+        ucrInputSpeedCuts.SetParameterIncludeArgumentName(False)
+        ucrInputSpeedCuts.AddQuotesIfUnrecognised = False
+        ' ucrInputSpeedCuts.AddToLinkedControls(ucrNudNoOfSpeeds, {"NA"}, bNewLinkedAddRemoveParameter:=True, bNewLinkedDisabledIfParameterMissing:=True)
         ucrInputSpeedCuts.SetRDefault("NA")
 
         ucrNudCalmWind.SetParameter(New RParameter("calm_wind", 9))
@@ -55,7 +59,7 @@ Public Class sdgWindrose
         dctThemePairs.Add("classic", Chr(34) & "classic" & Chr(34))
         ucrInputTheme.SetItems(dctThemePairs)
         ucrInputTheme.SetDropDownStyleAsNonEditable()
-        ucrInputSpeedCuts.AddToLinkedControls(ucrNudNoOfSpeeds, {"NA"}, bNewLinkedAddRemoveParameter:=True, bNewLinkedDisabledIfParameterMissing:=True)
+
 
         ucrInputPalettes.SetParameter(New RParameter("col_pal"))
         ucrInputPalettes.bAllowNonConditionValues = True
@@ -110,9 +114,19 @@ Public Class sdgWindrose
         If Not bControlsInitialised Then
             InitialiseControls()
         End If
+        If bReset Then
+            clsSpeedCuts = New RFunction
+        End If
         clsWindRoseFunc = clsNewRFunction
-        SetRCode(Me, clsWindRoseFunc, bReset)
-        SetComboBoxItems()
+        clsSpeedCuts.SetRCommand("c")
+
+        ucrPnlColourPalette.SetRCode(clsWindRoseFunc, bReset, bCloneIfNeeded:=True)
+        ucrNudNoOfDirections.SetRCode(clsWindRoseFunc, bReset, bCloneIfNeeded:=True)
+        ucrNudNoOfSpeeds.SetRCode(clsWindRoseFunc, bReset, bCloneIfNeeded:=True)
+        ucrNudCalmWind.SetRCode(clsWindRoseFunc, bReset, bCloneIfNeeded:=True)
+        ucrInputTheme.SetRCode(clsWindRoseFunc, bReset, bCloneIfNeeded:=True)
+        ucrInputSpeedCuts.SetRCode(clsSpeedCuts, bReset, bCloneIfNeeded:=True)
+        ucrInputPalettes.SetRCode(clsWindRoseFunc, bReset, bCloneIfNeeded:=True)
     End Sub
 
     Private Sub SetComboBoxItems()
@@ -130,5 +144,27 @@ Public Class sdgWindrose
 
     Private Sub ucrPnlColourPalette_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrPnlColourPalette.ControlValueChanged
         SetComboBoxItems()
+    End Sub
+
+    Private Sub ucrInputSpeedCuts_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrInputSpeedCuts.ControlValueChanged
+        If Not ucrInputSpeedCuts.IsEmpty AndAlso (ucrInputSpeedCuts.GetText <> "NA" OrElse ucrInputSpeedCuts.GetText <> "") Then
+            clsWindRoseFunc.AddParameter("speed_cuts", clsRFunctionParameter:=clsSpeedCuts, iPosition:=5)
+            clsWindRoseFunc.RemoveParameterByName("n_speeds")
+        Else
+            clsWindRoseFunc.RemoveParameterByName("speed_cuts")
+        End If
+
+    End Sub
+
+    Private Sub CutsSwap()
+        If ucrInputSpeedCuts.GetText = "NA" OrElse ucrInputSpeedCuts.GetText = "" Then
+            ucrNudNoOfSpeeds.Enabled = True
+        Else
+            ucrNudNoOfSpeeds.Enabled = False
+        End If
+    End Sub
+
+    Private Sub ucrInputSpeedCuts_ControlContentsChanged(ucrChangedControl As ucrCore) Handles ucrInputSpeedCuts.ControlContentsChanged
+        CutsSwap()
     End Sub
 End Class
