@@ -234,7 +234,7 @@ Public Class dlgCorrelation
     End Sub
 
     Private Sub cmdPlots_Click(sender As Object, e As EventArgs) Handles cmdOptions.Click
-        sdgCorrPlot.SetRCode(ucrBase.clsRsyntax, clsCorrelationFunction, clsCorrelationTestFunction, clsRGGcorrGraphicsFunction, clsRGraphicsFuction, clsRTempFunction, clsRGGscatMatrixFunction, clsColFunction, ucrSelectorCorrelation, bReset:=bResetSubdialog)
+        sdgCorrPlot.SetRCode(ucrBase.clsRsyntax, clsCorrelationFunction, clsCorrelationTestFunction, clsRGGcorrGraphicsFunction, clsRGraphicsFuction, clsRTempFunction, clsRGGscatMatrixFunction, clsColFunction, ucrSelectorCorrelation, bReset:=bResetSubdialog, bTwoColumns:=rdoTwoColumns.Checked)
         sdgCorrPlot.ShowDialog()
         bResetSubdialog = False
     End Sub
@@ -245,7 +245,6 @@ Public Class dlgCorrelation
         ElseIf rdoMultipleColumns.Checked Then
             ucrBase.clsRsyntax.SetBaseRFunction(clsCorrelationFunction)
         End If
-        sdgCorrPlot.BeforeAndAfterCodes()
     End Sub
 
     ' This is here because otherwise the panel cannot be set up correctly if you reopen the dialog when on the 2-variable rdo button
@@ -260,11 +259,11 @@ Public Class dlgCorrelation
     Private Sub ucrPnlColumns_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrPnlColumns.ControlValueChanged
         If rdoTwoColumns.Checked Then
             ucrReceiverFirstColumn.SetMeAsReceiver()
+            ucrBase.clsRsyntax.RemoveFromAfterCodes(clsRGGcorrGraphicsFunction)
         ElseIf rdoMultipleColumns.Checked Then
             ucrReceiverMultipleColumns.SetMeAsReceiver()
         End If
         ReceiverColumns()
-        CorrelationsEnable()
     End Sub
 
     Private Sub ucrReceiverMultipleColumns_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrReceiverMultipleColumns.ControlValueChanged, ucrReceiverFirstColumn.ControlValueChanged, ucrReceiverSecondColumn.ControlValueChanged
@@ -293,11 +292,5 @@ Public Class dlgCorrelation
         End If
     End Sub
 
-    Private Sub CorrelationsEnable()
-        If rdoTwoColumns.Checked Then
-            sdgCorrPlot.rdoCorrelationPlot.Enabled = False
-        Else
-            sdgCorrPlot.rdoCorrelationPlot.Enabled = True
-        End If
-    End Sub
+
 End Class
